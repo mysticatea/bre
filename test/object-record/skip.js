@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 const assert = require("assert")
-const Buffer = require("buffer").Buffer
+const Buffer = require("safe-buffer").Buffer
 const bre = require("../../")
 const BinaryRecord = bre.BinaryRecord
 const defineObjectRecord = bre.defineObjectRecord

@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "description": "A Binary-Object Mapper for Note.js",
   "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "engines": {
     "node": ">=4"
   },
   "dependencies": {},
-  "optionalDependencies": {
-    "iconv-lite": "^0.4.13"
-  },
   "devDependencies": {
     "babel-preset-power-assert": "^1.0.0",
     "babel-register": "^6.9.0",
@@ -23,6 +23,7 @@
     "opener": "^1.4.1",
     "power-assert": "^1.4.1",
     "rimraf": "^2.5.3",
+    "safe-buffer": "^5.0.1",
     "wait-on": "^1.5.2"
   },
   "scripts": {
@@ -30,6 +31,7 @@
     "postversion": "git push && git push --tags",
     "clean": "rimraf .nyc_output coverage",
     "lint": "eslint lib test",
+    "pretest": "npm run lint",
     "test": "nyc --require babel-register -- mocha \"test/**/*.js\"",
     "watch": "run-p watch:*",
     "watch:test": "chokidar lib test --initial --command \"npm test && nyc report --reporter=lcov\"",
