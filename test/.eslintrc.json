@@ -1,0 +1,6 @@
+{
+    "extends": "mysticatea/mocha",
+    "rules": {
+        "no-loop-func": "off"
+    }
+}
