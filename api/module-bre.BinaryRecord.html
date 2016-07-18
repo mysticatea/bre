@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: BinaryRecord</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: BinaryRecord</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="module-bre.html">bre</a>.</span>BinaryRecord</h2>
+        
+            <div class="class-description"><p>BinaryRecord class is the base class for all binary record types.</p>
+<p>This class cannot be directly instantiated.
+It needs to define subclasses with <a href="module-bre.html#.defineObjectRecord">module:bre.defineObjectRecord</a> or
+<a href="module-bre.html#.defineArrayRecord">module:bre.defineArrayRecord</a>.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="BinaryRecord"><span class="type-signature"></span>new BinaryRecord<span class="signature">(buffer, byteOffset)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>This class cannot be directly instantiated. It needs to define subclasses
+with <code>bre.defineObjectRecord</code> or <code>bre.defineArrayRecord</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>buffer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ArrayBuffer</span>
+|
+
+<span class="param-type">DataView</span>
+|
+
+<span class="param-type">TypedArray</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The buffer to wrap.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>byteOffset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">undefined</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The start position to wrap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record.js.html">binary-record.js</a>, <a href="binary-record.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".bitLength"><span class="type-signature">(static) </span>bitLength<span class="signature">(record)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets length in bits of the given record.</p>
+<pre class="prettyprint source"><code>const bits = bre.BinaryRecord.bitLength(record1)
+console.log(bits)  // => 16</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-bre.BinaryRecord.html">module:bre.BinaryRecord</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The record to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record.js.html">binary-record.js</a>, <a href="binary-record.js.html#line93">line 93</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The length in bits of the record.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".byteLength"><span class="type-signature">(static) </span>byteLength<span class="signature">(record)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets length in bytes of the given record.</p>
+<pre class="prettyprint source"><code>const bytes = bre.BinaryRecord.byteLength(record1)
+console.log(bytes)  // => 2</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-bre.BinaryRecord.html">module:bre.BinaryRecord</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The record to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record.js.html">binary-record.js</a>, <a href="binary-record.js.html#line108">line 108</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The length in bytes of the record.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".entries"><span class="type-signature">(static) </span>entries<span class="signature">(record)</span><span class="type-signature"> &rarr; {IterableIterator.&lt;Array.&lt;any>>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets the key-value pairs of the given record.</p>
+<p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/entries">Object.entries</a>
+does not work for records because the properties of records are
+getter/setter pairs in the prototype. Use this method instead.</p>
+<pre class="prettyprint source"><code>const entries = bre.BinaryRecord.entries(record1)
+console.log(entries)  // => [ [&quot;a&quot;, 1], [&quot;b&quot;, 10] ]</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-bre.BinaryRecord.html">module:bre.BinaryRecord</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The record to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record.js.html">binary-record.js</a>, <a href="binary-record.js.html#line167">line 167</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The key-value pairs of the record.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IterableIterator.&lt;Array.&lt;any>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".keys"><span class="type-signature">(static) </span>keys<span class="signature">(record)</span><span class="type-signature"> &rarr; {IterableIterator.&lt;string>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets the keys of the given record.</p>
+<p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/keys">Object.keys</a>
+does not work for records because the properties of records are
+getter/setter pairs in the prototype. Use this method instead.</p>
+<pre class="prettyprint source"><code>const keys = bre.BinaryRecord.keys(record1)
+console.log(keys)  // => [&quot;a&quot;, &quot;b&quot;]</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-bre.BinaryRecord.html">module:bre.BinaryRecord</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The record to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record.js.html">binary-record.js</a>, <a href="binary-record.js.html#line127">line 127</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The keys of the record.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IterableIterator.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".values"><span class="type-signature">(static) </span>values<span class="signature">(record)</span><span class="type-signature"> &rarr; {IterableIterator.&lt;any>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets the values of the given record.</p>
+<p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/values">Object.values</a>
+does not work for records because the properties of records are
+getter/setter pairs in the prototype. Use this method instead.</p>
+<pre class="prettyprint source"><code>const values = bre.BinaryRecord.values(record1)
+console.log(values)  // => [1, 10]</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-bre.BinaryRecord.html">module:bre.BinaryRecord</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The record to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record.js.html">binary-record.js</a>, <a href="binary-record.js.html#line146">line 146</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The values of the record.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IterableIterator.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-bre.html">bre</a></li><li><a href="module-bre_lib_text-encoders.html">bre/lib/text-encoders</a></li></ul><h3>Classes</h3><ul><li><a href="module-bre.BinaryRecord.html">BinaryRecord</a></li><li><a href="module-bre_lib_text-encoders.IConvTextEncoder.html">IConvTextEncoder</a></li><li><a href="module-bre_lib_text-encoders.NodejsBufferTextEncoder.html">NodejsBufferTextEncoder</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-bre.FieldDefinition.html">FieldDefinition</a></li><li><a href="module-bre.SkipDefinition.html">SkipDefinition</a></li><li><a href="module-bre_lib_text-encoders.TextEncoder.html">TextEncoder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#makeRecordPool">makeRecordPool</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Jul 18 2016 17:44:55 GMT+0900 (東京 (標準時))
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

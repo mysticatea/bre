@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: text-encoder-registry.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: text-encoder-registry.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @author Toru Nagashima
+ * @copyright 2016 Toru Nagashima. All rights reserved.
+ * See LICENSE file in root directory for full license.
+ */
+"use strict"
+
+//------------------------------------------------------------------------------
+// Requirements
+//------------------------------------------------------------------------------
+
+const assert = require("./assert")
+
+//------------------------------------------------------------------------------
+// Helper
+//------------------------------------------------------------------------------
+
+let currentEncoder = null
+
+//------------------------------------------------------------------------------
+// Exports
+//------------------------------------------------------------------------------
+
+/**
+ * Gets the current text encoder.
+ *
+ * Default is `null`.
+ *
+ *     const encoder = bre.getTextEncoder()
+ *     console.log(encoder)
+ *
+ * @method module:bre.getTextEncoder
+ * @returns {module:bre/lib/text-encoders.TextEncoder|null} The current text encoder.
+ */
+exports.getTextEncoder = function getTextEncoder() {
+    return currentEncoder
+}
+
+/**
+ * Sets the current text encoder.
+ *
+ * If you want to use `string` fields in records, you needs to set a text
+ * encoder.
+ *
+ *     const encoder = require("bre/lib/text-encoders/buffer")
+ *     bre.setTextEncoder(encoder)
+ *
+ * `bre` provides 2 implementations of TextEncoder.
+ *
+ * - {@link module:bre/lib/text-encoders.NodejsBufferTextEncoder}
+ * - {@link module:bre/lib/text-encoders.IConvTextEncoder}
+ *
+ * @method module:bre.setTextEncoder
+ * @param {module:bre/lib/text-encoders.TextEncoder|null} value - The text encoder to set.
+ * @returns {void}
+ */
+exports.setTextEncoder = function setTextEncoder(value) {
+    if (value !== null) {
+        assert.object(value, "value")
+        assert.function(value.encodingExists, "value.encodingExists")
+        assert.function(value.encode, "value.encode")
+        assert.function(value.decode, "value.decode")
+    }
+
+    currentEncoder = value
+}
+
+/**
+ * @module bre/lib/text-encoders
+ */
+
+/**
+ * TextEncoder is the interface to encode/decode strings.
+ *
+ * TextEncoder is used to define string fields of records.
+ *
+ * `bre` provides 2 implementations of `TextEncoder`.
+ *
+ * - {@link module:bre/lib/text-encoders.NodejsBufferTextEncoder}
+ * - {@link module:bre/lib/text-encoders.IConvTextEncoder}
+ *
+ * @memberof module:bre/lib/text-encoders
+ * @interface TextEncoder
+ */
+
+/**
+ * Checks whether the given string is a valid encoding type or not.
+ * @method module:bre/lib/text-encoders.TextEncoder#encodingExists
+ * @param {any} value - The value to check.
+ * @returns {boolean} `true` if the value is a valid encoding type.
+ */
+
+/**
+ * Converts the given string to the binary data of the string.
+ * @method module:bre/lib/text-encoders.TextEncoder#encode
+ * @param {string} text - The text to encode.
+ * @param {string} encoding - The encoding type to encode.
+ * @returns {DataView} Encoded binary data.
+ */
+
+/**
+ * Converts the given binary data to the string of the binary data.
+ * @method module:bre/lib/text-encoders.TextEncoder#decode
+ * @param {DataView} data - the binary data to decode.
+ * @param {number} byteOffset - The start index of text data in the data.
+ * @param {number} byteLength - The length of text data in the data.
+ * @param {string} encoding - The encoding type.
+ * @returns {string} Decoded string data.
+ */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-bre.html">bre</a></li><li><a href="module-bre_lib_text-encoders.html">bre/lib/text-encoders</a></li></ul><h3>Classes</h3><ul><li><a href="module-bre.BinaryRecord.html">BinaryRecord</a></li><li><a href="module-bre_lib_text-encoders.IConvTextEncoder.html">IConvTextEncoder</a></li><li><a href="module-bre_lib_text-encoders.NodejsBufferTextEncoder.html">NodejsBufferTextEncoder</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-bre.FieldDefinition.html">FieldDefinition</a></li><li><a href="module-bre.SkipDefinition.html">SkipDefinition</a></li><li><a href="module-bre_lib_text-encoders.TextEncoder.html">TextEncoder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#makeRecordPool">makeRecordPool</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Jul 18 2016 17:44:54 GMT+0900 (東京 (標準時))
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

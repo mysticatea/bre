@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: bre</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: bre</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Like C <code>struct</code>, <code>bre</code> allows accessing binary data as a structure fastly.</p>
+<p>The following steps are the basic usage of <code>bre</code>:</p>
+<ol>
+<li>Defines structures (calls it records).</li>
+<li>Creates mapping between the structure and a binary data.</li>
+<li>Reads/Writes the binary data as the structure.</li>
+</ol>
+<h3>Defines structures (calls it records).</h3><pre class="prettyprint source"><code>const bre = require(&quot;bre&quot;)
+const ExampleRecord = bre.defineObjectRecord(&quot;ExampleRecord&quot;, [
+    {type: &quot;uint8&quot;, name: &quot;a&quot;},
+    {type: &quot;uint8&quot;, name: &quot;b&quot;},
+])</code></pre><p>At first, it defines classes of structures by
+<a href="module-bre.html#.defineObjectRecord">bre.defineObjectRecord</a> or
+<a href="module-bre.html#.defineArrayRecord">bre.defineArrayRecord</a>.</p>
+<p>The code above defines a class <code>ExampleRecord</code> which has 2 properties (<code>a</code>
+and <code>b</code>).</p>
+<h3>Creates mapping between the structure and a binary data.</h3><p><code>ExampleRecord</code> can be instantiated with an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object or a view of
+an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object. E.g., Node.js <a href="https://nodejs.org/api/buffer.html#buffer_buffer">Buffer</a> objects are the view of
+<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> objects.</p>
+<pre class="prettyprint source"><code>const buffer = Buffer.from([0x01, 0x02, 0x03])
+const record1 = ExampleRecord.view(buffer, 0)
+const record2 = ExampleRecord.view(buffer, 1)  // offset 1</code></pre><p><code>ExampleRecord.view</code> factory method creates an instance of <code>ExampleRecord</code>.</p>
+<ul>
+<li>The 1st argument is the buffer to access.</li>
+<li>The 2nd argument is the offset in bytes to access.</li>
+</ul>
+<h3>Reads/Writes the binary data as the structure.</h3><pre class="prettyprint source"><code>console.log(record1.a, record1.b)  // => 1 2
+console.log(record2.a, record2.b)  // => 2 3
+
+record1.b = 10
+
+console.log(record1.b)  // => 10
+console.log(record2.a)  // => 10
+console.log(buffer[1])  // => 10</code></pre><p>Those record instances are just wrappers. The <code>record1.a</code> getter will read
+the 1st byte of <code>buffer</code> directly. The <code>record2.a</code> getter will read the 2nd
+byte of <code>buffer</code> directly.</p>
+<p>Also, The <code>record1.a</code> setter will write the 1st byte of <code>buffer</code> directly.
+This means that <code>record2.a</code> which is sharing the <code>buffer</code> will be changed.</p>
+<p>This would be useful to read and write binary data.</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-bre.BinaryRecord.html">BinaryRecord</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".defineArrayRecord"><span class="type-signature">(static) </span>defineArrayRecord<span class="signature">(type, length)</span><span class="type-signature"> &rarr; {class}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Defines an array record.</p>
+<p>The class this method defined is array-like.
+It has the ability to access by indexes and iterators.</p>
+<pre class="prettyprint source"><code>const ListRecord = bre.defineArrayRecord(&quot;uint8&quot;, 3)
+
+const buffer = Buffer.from([0x01, 0x02, 0x03])
+const record = ListRecord.view(buffer)
+
+console.log(record.length)  // => 3
+console.log(record[0])      // => 1
+console.log(record[1])      // => 2
+console.log(record[2])      // => 3
+
+for (const value of record) {
+    console.log(value)      // => 1 2 3
+}</code></pre><p>And it has several methods of <code>Array.prototype</code>:</p>
+<ul>
+<li><code>concat</code></li>
+<li><code>entries</code></li>
+<li><code>every</code></li>
+<li><code>filter</code></li>
+<li><code>find</code></li>
+<li><code>findIndex</code></li>
+<li><code>forEach</code></li>
+<li><code>includes</code></li>
+<li><code>indexOf</code></li>
+<li><code>join</code></li>
+<li><code>keys</code></li>
+<li><code>lastIndexOf</code></li>
+<li><code>map</code></li>
+<li><code>reduce</code></li>
+<li><code>reduceRight</code></li>
+<li><code>slice</code></li>
+<li><code>some</code></li>
+<li><code>values</code></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">class</span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The type of the elements.
+ See <a href="module-bre.FieldDefinition.html">module:bre.FieldDefinition</a>'s <code>type</code> property for details.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>length</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The count of elements.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record-builder.js.html">binary-record-builder.js</a>, <a href="binary-record-builder.js.html#line176">line 176</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The defined record class.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">class</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".defineObjectRecord"><span class="type-signature">(static) </span>defineObjectRecord<span class="signature">(className, fields)</span><span class="type-signature"> &rarr; {class}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Defines an object record.</p>
+<p>Object records are similar to C <code>struct</code>.
+It has several properties and it can map to binary blocks.</p>
+<pre class="prettyprint source"><code>const ExampleRecord = bre.defineObjectRecord(&quot;ExampleRecord&quot;, [
+    {type: &quot;uint8&quot;, name: &quot;a&quot;},
+    {type: &quot;uint8&quot;, name: &quot;b&quot;},
+])
+
+const buffer = Buffer.from([0x01, 0x02])
+const record = ExampleRecord.view(buffer)
+
+console.log(&quot;a =&quot;, record.a)           // => &quot;a = 1&quot;
+console.log(&quot;buffer[0] =&quot;, buffer[0])  // => &quot;buffer[0] = 1&quot;
+record.a = 7
+console.log(&quot;a =&quot;, record.a)           // => &quot;a = 7&quot;
+console.log(&quot;buffer[0] =&quot;, buffer[0])  // => &quot;buffer[0] = 7&quot;</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>className</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The class name of new record.</p>
+<ul>
+<li>This requires <a href="http://www.ecma-international.org/ecma-262/7.0/#sec-identifiers">a valid identifier of ECMAScript</a>.</li>
+<li>This requires an upper case character at the head of the name.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(<a href="module-bre.FieldDefinition.html">module:bre.FieldDefinition</a>|<a href="module-bre.SkipDefinition.html">module:bre.SkipDefinition</a>)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The list of field definition.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="binary-record-builder.js.html">binary-record-builder.js</a>, <a href="binary-record-builder.js.html#line116">line 116</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The defined record class.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">class</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getTextEncoder"><span class="type-signature">(static) </span>getTextEncoder<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="module-bre_lib_text-encoders.TextEncoder.html">module:bre/lib/text-encoders.TextEncoder</a>|null}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets the current text encoder.</p>
+<p>Default is <code>null</code>.</p>
+<pre class="prettyprint source"><code>const encoder = bre.getTextEncoder()
+console.log(encoder)</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="text-encoder-registry.js.html">text-encoder-registry.js</a>, <a href="text-encoder-registry.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The current text encoder.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="module-bre_lib_text-encoders.TextEncoder.html">module:bre/lib/text-encoders.TextEncoder</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".setTextEncoder"><span class="type-signature">(static) </span>setTextEncoder<span class="signature">(value)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Sets the current text encoder.</p>
+<p>If you want to use <code>string</code> fields in records, you needs to set a text
+encoder.</p>
+<pre class="prettyprint source"><code>const encoder = require(&quot;bre/lib/text-encoders/buffer&quot;)
+bre.setTextEncoder(encoder)</code></pre><p><code>bre</code> provides 2 implementations of TextEncoder.</p>
+<ul>
+<li><a href="module-bre_lib_text-encoders.NodejsBufferTextEncoder.html">module:bre/lib/text-encoders.NodejsBufferTextEncoder</a></li>
+<li><a href="module-bre_lib_text-encoders.IConvTextEncoder.html">module:bre/lib/text-encoders.IConvTextEncoder</a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-bre_lib_text-encoders.TextEncoder.html">module:bre/lib/text-encoders.TextEncoder</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The text encoder to set.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="text-encoder-registry.js.html">text-encoder-registry.js</a>, <a href="text-encoder-registry.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-bre.html">bre</a></li><li><a href="module-bre_lib_text-encoders.html">bre/lib/text-encoders</a></li></ul><h3>Classes</h3><ul><li><a href="module-bre.BinaryRecord.html">BinaryRecord</a></li><li><a href="module-bre_lib_text-encoders.IConvTextEncoder.html">IConvTextEncoder</a></li><li><a href="module-bre_lib_text-encoders.NodejsBufferTextEncoder.html">NodejsBufferTextEncoder</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-bre.FieldDefinition.html">FieldDefinition</a></li><li><a href="module-bre.SkipDefinition.html">SkipDefinition</a></li><li><a href="module-bre_lib_text-encoders.TextEncoder.html">TextEncoder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#makeRecordPool">makeRecordPool</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Jul 18 2016 17:44:55 GMT+0900 (東京 (標準時))
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
