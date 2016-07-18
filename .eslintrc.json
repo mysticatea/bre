@@ -1,6 +1,3 @@
 {
-    "extends": ["mysticatea", "mysticatea/node"],
-    "rules": {
-        "require-jsdoc": "off"
-    }
+    "extends": ["mysticatea", "mysticatea/node"]
 }
