@@ -29,11 +29,13 @@
     "wait-on": "^1.5.2"
   },
   "scripts": {
-    "preversion": "npm test",
-    "postversion": "git push && git push --tags",
+    "preversion": "npm test && npm run docs:jsdoc && npm run docs:gh-pages",
+    "version": "npm run docs:readme",
+    "postversion": "git push --all && git push --tags",
     "clean": "rimraf .nyc_output coverage docs",
     "lint": "eslint lib test",
-    "docs": "jsdoc -c .jsdocrc.json",
+    "docs:jsdoc": "jsdoc -c .jsdocrc.json",
+    "docs:gh-pages": "git checkout gh-pages && rm -rf api && mv docs api && git add --all && git commit -m \"Docs: update gh-pages\" && git checkout master",
     "docs:readme": "jsdoc2md --template extra/README.template.hbs lib/*.js | sed -e \"s/#module_bre/https:\\/\\/mysticatea.github.io\\/bre\\/api\\/module-bre.html#/g\" > README.md",
     "pretest": "npm run lint",
     "test": "nyc --require babel-register -- mocha \"test/**/*.js\" --reporter progress",
