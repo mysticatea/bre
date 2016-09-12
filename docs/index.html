@@ -46,7 +46,7 @@
         <article><h1>bre</h1><p><a href="https://www.npmjs.com/package/bre"><img src="https://img.shields.io/npm/v/bre.svg" alt="npm version"></a>
 <a href="http://www.npmtrends.com/bre"><img src="https://img.shields.io/npm/dm/bre.svg" alt="Downloads/month"></a>
 <a href="https://travis-ci.org/mysticatea/bre"><img src="https://travis-ci.org/mysticatea/bre.svg?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/github/mysticatea/bre?branch=master"><img src="https://coveralls.io/repos/github/mysticatea/bre/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://codecov.io/gh/mysticatea/bre"><img src="https://codecov.io/gh/mysticatea/bre/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://david-dm.org/mysticatea/bre"><img src="https://david-dm.org/mysticatea/bre.svg" alt="Dependency Status"></a></p>
 <p>A Binary-Object Mapper for JavaScript.</p>
 <pre class="prettyprint source lang-js"><code>const bre = require(&quot;bre&quot;)
@@ -97,12 +97,12 @@ const ExampleRecord = bre.defineObjectRecord(&quot;ExampleRecord&quot;, [
     {type: &quot;uint8&quot;, name: &quot;a&quot;},
     {type: &quot;uint8&quot;, name: &quot;b&quot;},
 ])</code></pre><p>At first, it defines classes of structures by
-<a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineObjectRecord">bre.defineObjectRecord</a> or
-<a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineArrayRecord">bre.defineArrayRecord</a>.</p>
+<a href="https://mysticatea.github.io/bre/module-bre.html#.defineObjectRecord">bre.defineObjectRecord</a> or
+<a href="https://mysticatea.github.io/bre/module-bre.html#.defineArrayRecord">bre.defineArrayRecord</a>.</p>
 <p>The code above defines a class <code>ExampleRecord</code> which has 2 properties (<code>a</code>
 and <code>b</code>).</p>
 <h3>2. Creates mapping between the structure and a binary data.</h3><p><code>ExampleRecord</code> can be instantiated with an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object or a view of
-an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object. E.g., Node.js <a href="https://nodejs.org/api/buffer.html#buffer_buffer">Buffer</a> objects are the view of
+an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object. E.g., Node.js <a href="https://nodejs.org/buffer.html#buffer_buffer">Buffer</a> objects are the view of
 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> objects.</p>
 <pre class="prettyprint source"><code>const buffer = Buffer.from([0x01, 0x02, 0x03])
 const record1 = ExampleRecord.view(buffer, 0)
@@ -131,16 +131,16 @@ const bits = ExampleRecord.bitLength</code></pre><p>Also, <code>BinaryRecord</co
 record instance.</p>
 <pre class="prettyprint source"><code>const bytes = bre.BinaryRecord.byteLength(record1)
 const bits = bre.BinaryRecord.bitLength(record1)</code></pre><h2>API Reference</h2><pre class="prettyprint source lang-js"><code>const bre = require(&quot;bre&quot;)</code></pre><ul>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineObjectRecord">bre.defineObjectRecord(className, fields)</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineArrayRecord">bre.defineArrayRecord(type, length)</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.getTextEncoder">bre.getTextEncoder()</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.setTextEncoder">bre.setTextEncoder(value)</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#">bre.BinaryRecord</a><ul>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.bitLength">bre.BinaryRecord.bitLength(record)</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.byteLength">bre.BinaryRecord.byteLength(record)</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.keys">bre.BinaryRecord.keys(record)</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.values">bre.BinaryRecord.values(record)</a></li>
-<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.entries">bre.BinaryRecord.entries(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.html#.defineObjectRecord">bre.defineObjectRecord(className, fields)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.html#.defineArrayRecord">bre.defineArrayRecord(type, length)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.html#.getTextEncoder">bre.getTextEncoder()</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.html#.setTextEncoder">bre.setTextEncoder(value)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#">bre.BinaryRecord</a><ul>
+<li><a href="https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.bitLength">bre.BinaryRecord.bitLength(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.byteLength">bre.BinaryRecord.byteLength(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.keys">bre.BinaryRecord.keys(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.values">bre.BinaryRecord.values(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.entries">bre.BinaryRecord.entries(record)</a></li>
 </ul>
 </li>
 </ul>
@@ -172,7 +172,7 @@ $ npm install</code></pre></li>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Sep 12 2016 13:39:59 GMT+0900 (東京 (標準時))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Sep 12 2016 14:50:27 GMT+0900 (東京 (標準時))
 </footer>
 
 <script> prettyPrint(); </script>
