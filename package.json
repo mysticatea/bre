@@ -14,7 +14,7 @@
     "babel-preset-power-assert": "^1.0.0",
     "babel-register": "^6.9.0",
     "chokidar-cli": "^1.2.0",
-    "coveralls": "^2.11.11",
+    "codecov": "^1.0.1",
     "eslint": "^3.0.1",
     "eslint-config-mysticatea": "^5.0.0",
     "iconv-lite": "^0.4.13",
@@ -40,7 +40,7 @@
     "watch": "run-p watch:*",
     "watch:test": "chokidar lib test --initial --command \"npm test && nyc report --reporter=lcov\"",
     "watch:coverage": "wait-on ./coverage/lcov-report/index.html && opener ./coverage/lcov-report/index.html",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "codecov": "nyc report -r lcovonly && codecov"
   },
   "repository": {
     "type": "git",
