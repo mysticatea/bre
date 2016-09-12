@@ -74,8 +74,8 @@ The following steps are the basic usage of `bre`:
     ])
 
 At first, it defines classes of structures by
-[bre.defineObjectRecord](https://mysticatea.github.io/bre/api/module-bre.html#.defineObjectRecord) or
-[bre.defineArrayRecord](https://mysticatea.github.io/bre/api/module-bre.html#.defineArrayRecord).
+[bre.defineObjectRecord](https://mysticatea.github.io/bre/module-bre.html#.defineObjectRecord) or
+[bre.defineArrayRecord](https://mysticatea.github.io/bre/module-bre.html#.defineArrayRecord).
 
 The code above defines a class `ExampleRecord` which has 2 properties (`a`
 and `b`).
@@ -130,7 +130,7 @@ record instance.
     const bits = bre.BinaryRecord.bitLength(record1)
 
 [ArrayBuffer]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
-[Buffer]: https://nodejs.org/api/buffer.html#buffer_buffer
+[Buffer]: https://nodejs.org/buffer.html#buffer_buffer
 
 
 ## API Reference
@@ -139,16 +139,16 @@ record instance.
 const bre = require("bre")
 ```
 
-- [bre.defineObjectRecord(className, fields)](https://mysticatea.github.io/bre/api/module-bre.html#.defineObjectRecord)
-- [bre.defineArrayRecord(type, length)](https://mysticatea.github.io/bre/api/module-bre.html#.defineArrayRecord)
-- [bre.getTextEncoder()](https://mysticatea.github.io/bre/api/module-bre.html#.getTextEncoder)
-- [bre.setTextEncoder(value)](https://mysticatea.github.io/bre/api/module-bre.html#.setTextEncoder)
-- [bre.BinaryRecord](https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#)
-    - [bre.BinaryRecord.bitLength(record)](https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.bitLength)
-    - [bre.BinaryRecord.byteLength(record)](https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.byteLength)
-    - [bre.BinaryRecord.keys(record)](https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.keys)
-    - [bre.BinaryRecord.values(record)](https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.values)
-    - [bre.BinaryRecord.entries(record)](https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.entries)
+- [bre.defineObjectRecord(className, fields)](https://mysticatea.github.io/bre/module-bre.html#.defineObjectRecord)
+- [bre.defineArrayRecord(type, length)](https://mysticatea.github.io/bre/module-bre.html#.defineArrayRecord)
+- [bre.getTextEncoder()](https://mysticatea.github.io/bre/module-bre.html#.getTextEncoder)
+- [bre.setTextEncoder(value)](https://mysticatea.github.io/bre/module-bre.html#.setTextEncoder)
+- [bre.BinaryRecord](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#)
+    - [bre.BinaryRecord.bitLength(record)](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.bitLength)
+    - [bre.BinaryRecord.byteLength(record)](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.byteLength)
+    - [bre.BinaryRecord.keys(record)](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.keys)
+    - [bre.BinaryRecord.values(record)](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.values)
+    - [bre.BinaryRecord.entries(record)](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.entries)
 
 ## Changelog
 

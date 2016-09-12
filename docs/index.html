@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>bre</h1><p><a href="https://www.npmjs.com/package/bre"><img src="https://img.shields.io/npm/v/bre.svg" alt="npm version"></a>
+<a href="http://www.npmtrends.com/bre"><img src="https://img.shields.io/npm/dm/bre.svg" alt="Downloads/month"></a>
+<a href="https://travis-ci.org/mysticatea/bre"><img src="https://travis-ci.org/mysticatea/bre.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/mysticatea/bre?branch=master"><img src="https://coveralls.io/repos/github/mysticatea/bre/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://david-dm.org/mysticatea/bre"><img src="https://david-dm.org/mysticatea/bre.svg" alt="Dependency Status"></a></p>
+<p>A Binary-Object Mapper for JavaScript.</p>
+<pre class="prettyprint source lang-js"><code>const bre = require(&quot;bre&quot;)
+
+// Define a Record Type.
+const TcpHeader = bre.defineObjectRecord(&quot;TcpHeader&quot;, [
+    {type: &quot;uint16&quot;, name: &quot;srcPort&quot;},
+    {type: &quot;uint16&quot;, name: &quot;dstPort&quot;},
+    {type: &quot;uint32&quot;, name: &quot;seqNo&quot;},
+    {type: &quot;uint32&quot;, name: &quot;ackNo&quot;},
+    {type: &quot;bit4&quot;, name: &quot;dataOffset&quot;},
+    {skip: 6},
+    {type: &quot;bit1&quot;, name: &quot;urgCode&quot;},
+    {type: &quot;bit1&quot;, name: &quot;ackCode&quot;},
+    {type: &quot;bit1&quot;, name: &quot;pshCode&quot;},
+    {type: &quot;bit1&quot;, name: &quot;rstCode&quot;},
+    {type: &quot;bit1&quot;, name: &quot;synCode&quot;},
+    {type: &quot;bit1&quot;, name: &quot;finCode&quot;},
+    {type: &quot;uint16&quot;, name: &quot;windowSize&quot;},
+    {type: &quot;uint16&quot;, name: &quot;checksum&quot;},
+    {type: &quot;uint16&quot;, name: &quot;urgentPonter&quot;},
+])
+
+// Connect to a Buffer
+const header = TcpHeader.view(a_buffer, 0)
+
+// Read and Write the Buffer
+console.log(header.srcPort, &quot;→&quot;, header.dstPort, &quot;🚀&quot;)
+header.seqNo += 1
+header.ackNo += 1
+header.ackCode = 1</code></pre><p><code>bre</code>'s record object is just the wrapper of an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object.</p>
+<ul>
+<li>The read of a record object's property is the read of the wrapped buffer.</li>
+<li>The write of a record object's property is the write of the wrapped buffer.</li>
+</ul>
+<h2>Installation</h2><pre class="prettyprint source lang-bash"><code>$ npm install --save bre</code></pre><ul>
+<li>Requires Node.js <code>&gt;=4.0.0</code></li>
+</ul>
+<h2>Usage</h2><p>Like C <code>struct</code>, <code>bre</code> allows accessing binary data as a structure fastly.</p>
+<p>The following steps are the basic usage of <code>bre</code>:</p>
+<ol>
+<li>Defines structures (calls it records).</li>
+<li>Creates mapping between the structure and a binary data.</li>
+<li>Reads/Writes the binary data as the structure.</li>
+</ol>
+<h3>1. Defines structures (calls it records).</h3><pre class="prettyprint source"><code>const bre = require(&quot;bre&quot;)
+const ExampleRecord = bre.defineObjectRecord(&quot;ExampleRecord&quot;, [
+    {type: &quot;uint8&quot;, name: &quot;a&quot;},
+    {type: &quot;uint8&quot;, name: &quot;b&quot;},
+])</code></pre><p>At first, it defines classes of structures by
+<a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineObjectRecord">bre.defineObjectRecord</a> or
+<a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineArrayRecord">bre.defineArrayRecord</a>.</p>
+<p>The code above defines a class <code>ExampleRecord</code> which has 2 properties (<code>a</code>
+and <code>b</code>).</p>
+<h3>2. Creates mapping between the structure and a binary data.</h3><p><code>ExampleRecord</code> can be instantiated with an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object or a view of
+an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> object. E.g., Node.js <a href="https://nodejs.org/api/buffer.html#buffer_buffer">Buffer</a> objects are the view of
+<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a> objects.</p>
+<pre class="prettyprint source"><code>const buffer = Buffer.from([0x01, 0x02, 0x03])
+const record1 = ExampleRecord.view(buffer, 0)
+const record2 = ExampleRecord.view(buffer, 1)  // offset 1</code></pre><p><code>ExampleRecord.view</code> factory method creates an instance of <code>ExampleRecord</code>.</p>
+<ul>
+<li>The 1st argument is the buffer to access.</li>
+<li>The 2nd argument is the offset in bytes to access.</li>
+</ul>
+<h3>3. Reads/Writes the binary data as the structure.</h3><pre class="prettyprint source"><code>console.log(record1.a, record1.b)  // => 1 2
+console.log(record2.a, record2.b)  // => 2 3
+
+record1.b = 10
+
+console.log(record1.b)  // => 10
+console.log(record2.a)  // => 10
+console.log(buffer[1])  // => 10</code></pre><p>Those record instances are just wrappers. The <code>record1.a</code> getter will read
+the 1st byte of <code>buffer</code> directly. The <code>record2.a</code> getter will read the 2nd
+byte of <code>buffer</code> directly.</p>
+<p>Also, The <code>record1.a</code> setter will write the 1st byte of <code>buffer</code> directly.
+This means that <code>record2.a</code> which is sharing the <code>buffer</code> will be changed.</p>
+<p>This would be useful to read and write binary data.</p>
+<h3>The size of records.</h3><p>Record classes have 2 properties to get the record size.
+Those are static getter properties (since records are fixed size).</p>
+<pre class="prettyprint source"><code>const bytes = ExampleRecord.byteLength
+const bits = ExampleRecord.bitLength</code></pre><p>Also, <code>BinaryRecord</code> class provides 2 methods to get the record size of a
+record instance.</p>
+<pre class="prettyprint source"><code>const bytes = bre.BinaryRecord.byteLength(record1)
+const bits = bre.BinaryRecord.bitLength(record1)</code></pre><h2>API Reference</h2><pre class="prettyprint source lang-js"><code>const bre = require(&quot;bre&quot;)</code></pre><ul>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineObjectRecord">bre.defineObjectRecord(className, fields)</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.defineArrayRecord">bre.defineArrayRecord(type, length)</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.getTextEncoder">bre.getTextEncoder()</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.html#.setTextEncoder">bre.setTextEncoder(value)</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#">bre.BinaryRecord</a><ul>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.bitLength">bre.BinaryRecord.bitLength(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.byteLength">bre.BinaryRecord.byteLength(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.keys">bre.BinaryRecord.keys(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.values">bre.BinaryRecord.values(record)</a></li>
+<li><a href="https://mysticatea.github.io/bre/api/module-bre.BinaryRecord.html#.entries">bre.BinaryRecord.entries(record)</a></li>
+</ul>
+</li>
+</ul>
+<h2>Changelog</h2><ul>
+<li>https://github.com/mysticatea/bre/releases</li>
+</ul>
+<h2>Contributing</h2><p>Thank you for contributing!</p>
+<ul>
+<li><p>Getting code:</p>
+<pre class="prettyprint source lang-bash"><code>$ git clone https://github.com/mysticatea/bre.git
+$ cd bre
+$ npm install</code></pre></li>
+<li><p>Testing:</p>
+<pre class="prettyprint source lang-bash"><code>$ npm run watch</code></pre></li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-bre.html">bre</a></li><li><a href="module-bre_lib_text-encoders.html">bre/lib/text-encoders</a></li></ul><h3>Classes</h3><ul><li><a href="module-bre.BinaryRecord.html">BinaryRecord</a></li><li><a href="module-bre_lib_text-encoders.IConvTextEncoder.html">IConvTextEncoder</a></li><li><a href="module-bre_lib_text-encoders.NodejsBufferTextEncoder.html">NodejsBufferTextEncoder</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-bre.FieldDefinition.html">FieldDefinition</a></li><li><a href="module-bre.SkipDefinition.html">SkipDefinition</a></li><li><a href="module-bre_lib_text-encoders.TextEncoder.html">TextEncoder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#makeRecordPool">makeRecordPool</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Sep 12 2016 13:39:59 GMT+0900 (東京 (標準時))
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
