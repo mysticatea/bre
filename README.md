@@ -47,7 +47,7 @@ header.ackCode = 1
 
 [ArrayBuffer]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
 
-## Installation
+## :cd: Installation
 
 ```bash
 $ npm install --save bre
@@ -55,7 +55,7 @@ $ npm install --save bre
 
 - Requires Node.js `>=4.0.0`
 
-## Usage
+## :book: Usage
 
 Like C `struct`, `bre` allows accessing binary data as a structure fastly.
 
@@ -133,7 +133,7 @@ record instance.
 [Buffer]: https://nodejs.org/buffer.html#buffer_buffer
 
 
-## API Reference
+## :books: API Reference
 
 ```js
 const bre = require("bre")
@@ -150,11 +150,11 @@ const bre = require("bre")
     - [bre.BinaryRecord.values(record)](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.values)
     - [bre.BinaryRecord.entries(record)](https://mysticatea.github.io/bre/module-bre.BinaryRecord.html#.entries)
 
-## Changelog
+## :newspaper: Changelog
 
 - https://github.com/mysticatea/bre/releases
 
-## Contributing
+## :muscle: Contributing
 
 Thank you for contributing!
 
