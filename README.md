@@ -6,7 +6,9 @@
 [![codecov](https://codecov.io/gh/mysticatea/bre/branch/master/graph/badge.svg)](https://codecov.io/gh/mysticatea/bre)
 [![Dependency Status](https://david-dm.org/mysticatea/bre.svg)](https://david-dm.org/mysticatea/bre)
 
-A Binary-Object Mapper for JavaScript.
+A Object-Binary Mapper for JavaScript.
+
+This is similar to C `struct` with a memory block.
 
 ```js
 const bre = require("bre")
