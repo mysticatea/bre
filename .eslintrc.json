@@ -1,6 +1,0 @@
-{
-    "extends": ["mysticatea", "mysticatea/node"],
-    "rules": {
-        "class-methods-use-this": "off"
-    }
-}

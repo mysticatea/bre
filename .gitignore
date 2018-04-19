@@ -1,4 +1,8 @@
 /.nyc_output
+/.temp
 /coverage
 /node_modules
+/text-encoders
 /npm-debug.log
+/index.*
+/test.*
