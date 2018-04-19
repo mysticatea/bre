@@ -267,7 +267,7 @@ class TcpHeader extends ObjectRecord {
 }
 ```
 
-</details>
+</details><br>
 
 Plus, this package provides the perfect type definition for the classes that `defineObjectRecord`/`defineArrayRecord` defined.
 
