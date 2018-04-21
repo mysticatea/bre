@@ -11,23 +11,100 @@ import { Record, compile, uid } from "./record"
 
 const instances = new Map<string, ArrayRecordConstructor<any>>()
 const ArrayRecord = (() => {
-    //eslint-disable-next-line no-shadow
-    class ArrayRecord extends Record {
-        [Symbol.isConcatSpreadable] = true;
+    // Check for https://bugs.chromium.org/p/v8/issues/detail?id=7677
+    function fillIsValid() {
+        try {
+            Array.prototype.fill.call(
+                //eslint-disable-next-line accessor-pairs, no-empty-function
+                Object.freeze({ length: 1, set 0(v: any) {} }),
+            )
+            return true
+        } catch (_err) {
+            return false
+        }
+    }
 
-        *values() {
-            const self = this as any
-            const len = self.length
+    // Check for https://bugs.chromium.org/p/v8/issues/detail?id=7682
+    function sortIsValid() {
+        try {
+            const s = Symbol("s")
+            class TestArrayLike {
+                [s] = [2, 1]
+                get 0() {
+                    return this[s][0]
+                }
+                set 0(value) {
+                    this[s][0] = value
+                }
+                get 1() {
+                    return this[s][1]
+                }
+                set 1(value) {
+                    this[s][1] = value
+                }
+                get length() {
+                    return 2
+                }
+            }
+            Array.prototype.sort.call(new TestArrayLike())
+            return true
+        } catch (_err) {
+            return false
+        }
+    }
+
+    abstract class ArrayRecord<T> extends Record {
+        abstract get length(): number
+        [index: number]: T
+
+        // For `.concat()`
+        [Symbol.isConcatSpreadable] = true
+
+        // Fallback for https://bugs.chromium.org/p/v8/issues/detail?id=7677
+        fill(value: T, start?: number, end?: number): this {
+            if (this == null) {
+                throw new TypeError("this is null or not defined")
+            }
+            const O = Object(this)
+            const len = O.length >>> 0
+            const relativeStart = (start || 0) >> 0
+            const relativeEnd = end === undefined ? len : end >> 0
+            const final =
+                relativeEnd < 0
+                    ? Math.max(len + relativeEnd, 0)
+                    : Math.min(relativeEnd, len)
+            let k =
+                relativeStart < 0
+                    ? Math.max(len + relativeStart, 0)
+                    : Math.min(relativeStart, len)
+
+            while (k < final) {
+                O[k] = value
+                k++
+            }
+
+            return O
+        }
+
+        // Fallback for https://bugs.chromium.org/p/v8/issues/detail?id=7682
+        sort(compareFn?: (a: T, b: T) => number): this {
+            const sorted = Array.from(this).sort(compareFn)
+            for (let i = 0; i < sorted.length; ++i) {
+                this[i] = sorted[i]
+            }
+            return this
+        }
+
+        // Fallback for https://bugs.chromium.org/p/v8/issues/detail?id=4247
+        *values(): IterableIterator<T> {
+            const O = Object(this)
+            const len = O.length >>> 0
             for (let i = 0; i < len; ++i) {
-                yield self[i]
+                yield O[i]
             }
         }
 
-        [Symbol.iterator]() {
-            return this.values()
-        }
-
-        toJSON() {
+        toJSON(): T[] {
             return Array.from(this)
         }
     }
@@ -37,7 +114,6 @@ const ArrayRecord = (() => {
         "copyWithin",
         "entries",
         "every",
-        "fill",
         "filter",
         "find",
         "findIndex",
@@ -53,7 +129,6 @@ const ArrayRecord = (() => {
         "reverse",
         "slice",
         "some",
-        "sort",
         "values",
     ]) {
         const descriptor = Object.getOwnPropertyDescriptor(Array.prototype, key)
@@ -61,6 +136,29 @@ const ArrayRecord = (() => {
             Object.defineProperty(ArrayRecord.prototype, key, descriptor)
         }
     }
+    if (fillIsValid()) {
+        const descriptor = Object.getOwnPropertyDescriptor(
+            Array.prototype,
+            "fill",
+        )
+        if (descriptor) {
+            Object.defineProperty(ArrayRecord.prototype, "fill", descriptor)
+        }
+    }
+    if (sortIsValid()) {
+        const descriptor = Object.getOwnPropertyDescriptor(
+            Array.prototype,
+            "sort",
+        )
+        if (descriptor) {
+            Object.defineProperty(ArrayRecord.prototype, "sort", descriptor)
+        }
+    }
+    Object.defineProperty(
+        ArrayRecord.prototype,
+        Symbol.iterator,
+        Object.getOwnPropertyDescriptor(ArrayRecord.prototype, "values")!,
+    )
 
     return ArrayRecord
 })()

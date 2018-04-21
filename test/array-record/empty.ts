@@ -40,7 +40,12 @@ describe("defineArrayRecord:", () => {
                 thrownMessage(() => {
                     record[0] = 1
                 }),
-                "Cannot add property 0, object is not extensible",
+                thrownMessage(() => {
+                    // This error message is different between Node.js 6.x and 8.x.
+                    // https://github.com/eslint/typescript-eslint-parser/issues/467
+                    //eslint-disable-next-line no-empty-pattern
+                    Object.freeze({})[0] = 1
+                }),
             )
         })
 

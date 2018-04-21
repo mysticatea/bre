@@ -60,6 +60,7 @@ export interface ArrayRecord<T> extends Record {
         callbackfn: (value: T, index: number, array: T[]) => void,
         thisArg?: any,
     ): void
+    includes(searchElement: T, fromIndex?: number): boolean
     indexOf(searchElement: T, fromIndex?: number): number
     join(separator?: string): string
     lastIndexOf(searchElement: T, fromIndex?: number): number
@@ -119,7 +120,7 @@ export interface ArrayRecord<T> extends Record {
         ) => U,
         initialValue: U,
     ): U
-    reverse(): T[]
+    reverse(): this
     slice(start?: number, end?: number): T[]
     some(
         callbackfn: (value: T, index: number, array: T[]) => boolean,
