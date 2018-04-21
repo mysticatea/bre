@@ -1,4 +1,6 @@
 import assert from "../assert"
+import { getTextEncoder } from "../text-encoder-registry"
+import { ArrayRecordConstructor, ObjectRecordConstructor } from "../types"
 
 export const sBuffer = Symbol("buffer")
 
@@ -56,3 +58,24 @@ export const uid = (() => {
         return `_${n2}$${`000${n1}`.slice(-4)}`
     }
 })()
+
+export function compile(
+    baseRecord: Function,
+    subRecords: ReadonlyArray<ArrayRecordConstructor | ObjectRecordConstructor>,
+    sourceCode: string,
+): any {
+    try {
+        return Function(
+            "TextEncoder",
+            "assert",
+            "sBuffer",
+            baseRecord.name,
+            ...subRecords.map(r => r.uid),
+            sourceCode,
+        )(getTextEncoder(), assert, sBuffer, baseRecord, ...subRecords)
+    } catch (err) {
+        err.message += "\nSourceCode:"
+        err.message += sourceCode
+        throw err
+    }
+}

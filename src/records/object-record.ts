@@ -5,12 +5,11 @@ import {
     DataType,
     getAccessor,
 } from "../accessor-registry"
-import { getTextEncoder } from "../text-encoder-registry"
 import {
     ObjectRecord as ObjectRecordInterface,
     ObjectRecordConstructor,
 } from "../types"
-import { Record, sBuffer, uid } from "./record"
+import { Record, compile, uid } from "./record"
 
 const VALID_RECORD_NAME = /^[A-Z][a-zA-Z0-9_$]*$/
 const VALID_FIELD_NAME = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
@@ -101,10 +100,11 @@ function defineObjectRecord0(
     extraMembers: { [key: string]: any },
 ) {
     const byteLength = (bitLength >> 3) + (bitLength & 0x07 ? 1 : 0)
-    const textEncoder = getTextEncoder()
-    const records = fields.map(f => f.accessor.subRecord).filter(Boolean)
-    const uids = records.map(record => record.uid)
-    const definitionBody = `return class ${className} extends ObjectRecord {
+    const subRecords = fields.map(f => f.accessor.subRecord).filter(Boolean)
+    const retv = compile(
+        ObjectRecord,
+        subRecords,
+        `return class ${className} extends ${ObjectRecord.name} {
     constructor(buffer, byteOffset) {
         super(buffer, byteOffset, ${byteLength})
     }
@@ -142,31 +142,18 @@ function defineObjectRecord0(
     }
 
     ${propertiesCode(fields)}
-}`
-    try {
-        const retv = Function(
-            "ObjectRecord",
-            "TextEncoder",
-            "assert",
-            "sBuffer",
-            ...uids,
-            definitionBody,
-        )(ObjectRecord, textEncoder, assert, sBuffer, ...records)
+}`,
+    )
 
-        for (const key of Object.keys(extraMembers)) {
-            Object.defineProperty(retv.prototype, key, {
-                value: extraMembers[key],
-                configurable: true,
-                writable: true,
-            })
-        }
-
-        return retv
-    } catch (err) {
-        console.error("******** FAILED TO COMPILE ********")
-        console.error(definitionBody)
-        throw err
+    for (const key of Object.keys(extraMembers)) {
+        Object.defineProperty(retv.prototype, key, {
+            value: extraMembers[key],
+            configurable: true,
+            writable: true,
+        })
     }
+
+    return retv
 }
 
 export interface DataTypeWithOffset<T extends DataType = DataType> {

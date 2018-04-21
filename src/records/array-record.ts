@@ -6,14 +6,15 @@ import {
     DataType,
     getAccessor,
 } from "../accessor-registry"
-import { getTextEncoder } from "../text-encoder-registry"
 import { ArrayRecordConstructor } from "../types"
-import { Record, sBuffer, uid } from "./record"
+import { Record, compile, uid } from "./record"
 
 const instances = new Map<string, ArrayRecordConstructor<any>>()
 const ArrayRecord = (() => {
     //eslint-disable-next-line no-shadow
     class ArrayRecord extends Record {
+        [Symbol.isConcatSpreadable] = true;
+
         *values() {
             const self = this as any
             const len = self.length
@@ -84,10 +85,11 @@ function defineArrayRecord0<T extends DataType>(
     const className = `ArrayRecord$${accessor.name}$${length}`
     const bitLength = accessor.bits * length
     const byteLength = (bitLength >> 3) + (bitLength & 0x07 ? 1 : 0)
-    const textEncoder = getTextEncoder()
-    const records = accessor.subRecord ? [accessor.subRecord] : []
-    const uids = records.map(record => record.uid)
-    const definitionBody = `return class ${className} extends ArrayRecord {
+    const subRecords = accessor.subRecord ? [accessor.subRecord] : []
+    return compile(
+        ArrayRecord,
+        subRecords,
+        `return class ${className} extends ${ArrayRecord.name} {
     constructor(buffer, byteOffset) {
         super(buffer, byteOffset, ${byteLength})
     }
@@ -117,21 +119,8 @@ function defineArrayRecord0<T extends DataType>(
     }
 
     ${propertiesCode(accessor, length)}
-}`
-    try {
-        return Function(
-            "ArrayRecord",
-            "TextEncoder",
-            "assert",
-            "sBuffer",
-            ...uids,
-            definitionBody,
-        )(ArrayRecord, textEncoder, assert, sBuffer, ...records)
-    } catch (err) {
-        console.error("******** FAILED TO COMPILE ********")
-        console.error(definitionBody)
-        throw err
-    }
+}`,
+    )
 }
 
 export function defineArrayRecord<T extends DataType>(
