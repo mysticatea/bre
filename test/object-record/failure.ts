@@ -42,15 +42,6 @@ describe("defineObjectRecord misusecases:", () => {
         )
     })
 
-    it("should throw an error if it defines a field with invalid name", () => {
-        assert.strictEqual(
-            thrownMessage(() => {
-                defineObjectRecord("Record", { "invalid name": "int8" })
-            }),
-            "AssertionError: The name of 'shape.invalid name' property should be a camelCase identifier, but got \"invalid name\".",
-        )
-    })
-
     it("should throw an error if it defines toString field", () => {
         assert.strictEqual(
             thrownMessage(() => {

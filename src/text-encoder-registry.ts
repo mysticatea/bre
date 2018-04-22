@@ -1,5 +1,5 @@
-import { TextEncoder } from "./text-encoders/text-encoder"
-import assert from "./assert"
+import assert from "./internal/assert"
+import { TextEncoder } from "./types"
 
 let currentTextEncoder: TextEncoder | null = null
 

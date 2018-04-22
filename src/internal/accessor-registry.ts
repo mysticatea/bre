@@ -1,11 +1,13 @@
-import assert from "./assert"
-import { getTextEncoder } from "./text-encoder-registry"
+import { getTextEncoder } from "../text-encoder-registry"
 import {
     ArrayRecordConstructor,
+    DataType,
     ObjectRecordConstructor,
-    RecordOf,
-} from "./types"
-import { Accessor } from "./accessors/accessor"
+    PropertyTypeOf,
+    StringDataType,
+} from "../types"
+import assert from "./assert"
+import { Accessor } from "./types"
 import { BitAccessor } from "./accessors/bit-accessor"
 import { FloatAccessor } from "./accessors/float-accessor"
 import { IntAccessor } from "./accessors/int-accessor"
@@ -72,7 +74,7 @@ function getStringAccessor(
         assert.integer(byteLength, "byteLength")
         assert.gte(byteLength, 1, "byteLength")
 
-        accessor = new StringAccessor(encoding, byteLength)
+        accessor = new StringAccessor(encoder!, encoding, byteLength)
         stringPool.set(key, accessor)
     }
 
@@ -92,48 +94,16 @@ function getRecordAccessor<
     return accessor
 }
 
-export type NumericDataType =
-    | "bit1"
-    | "bit2"
-    | "bit3"
-    | "bit4"
-    | "bit5"
-    | "bit6"
-    | "bit7"
-    | "bit8"
-    | "int8"
-    | "int16"
-    | "int32"
-    | "uint8"
-    | "uint16"
-    | "uint32"
-    | "float32"
-    | "float64"
-export type StringDataType = { encoding: string; byteLength: number }
-export type DataType =
-    | NumericDataType
-    | StringDataType
-    | ArrayRecordConstructor
-    | ObjectRecordConstructor
-export type AccessorDataTypeOf<T extends DataType> = T extends NumericDataType
-    ? number
-    : T extends StringDataType
-        ? string
-        : T extends ArrayRecordConstructor | ObjectRecordConstructor
-            ? RecordOf<T>
-            : never
-export type AccessorOf<T extends DataType> = Accessor<AccessorDataTypeOf<T>>
-
-export function getAccessor<T extends DataType>(type: T): AccessorOf<T> {
+export function getAccessor<T extends DataType>(
+    type: T,
+): Accessor<PropertyTypeOf<T>> {
     if (isNumericDataType(type)) {
         return numericAccessors[type]
     }
     if (isStringDataType(type)) {
-        return getStringAccessor(type.encoding, type.byteLength)
+        return getStringAccessor(type.encoding, type.byteLength) as any // WHY?
     }
 
     // https://github.com/Microsoft/TypeScript/issues/13995
-    return getRecordAccessor(type as any) as any
+    return getRecordAccessor(type as any)
 }
-
-export { Accessor }

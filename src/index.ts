@@ -1,17 +1,17 @@
-import { defineArrayRecord } from "./records/array-record"
-import { DataTypeWithOffset, defineObjectRecord } from "./records/object-record"
-import { TextEncoder } from "./text-encoders/text-encoder"
-import { DataType } from "./accessor-registry"
+import { defineArrayRecord } from "./array-record"
+import { defineObjectRecord } from "./object-record"
 import { getTextEncoder, setTextEncoder } from "./text-encoder-registry"
 import {
     ArrayRecord,
     ArrayRecordConstructor,
+    DataType,
     Record,
     RecordConstructor,
     ConstructorOf,
     ObjectRecord,
     ObjectRecordConstructor,
     RecordOf,
+    TextEncoder,
 } from "./types"
 import { isRecord } from "./utils"
 
@@ -22,7 +22,6 @@ export {
     RecordConstructor,
     ConstructorOf,
     DataType,
-    DataTypeWithOffset,
     ObjectRecord,
     ObjectRecordConstructor,
     RecordOf,

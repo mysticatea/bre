@@ -1,18 +1,14 @@
-import assert from "../assert"
+import { getAccessor } from "./internal/accessor-registry"
+import assert from "./internal/assert"
+import { Record } from "./internal/record"
+import { Accessor } from "./internal/types"
 import {
-    Accessor,
-    AccessorDataTypeOf,
     DataType,
-    getAccessor,
-} from "../accessor-registry"
-import {
-    ObjectRecord as ObjectRecordInterface,
     ObjectRecordConstructor,
-} from "../types"
-import { Record, compile, uid } from "./record"
+    PropertyTypeOf as PropertyTypeOf_,
+} from "./types"
 
 const VALID_RECORD_NAME = /^[A-Z][a-zA-Z0-9_$]*$/
-const VALID_FIELD_NAME = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
 const INVALID_FIELD_NAME = /^(?:__(?:(?:define|lookup)(?:G|S)etter|proto|noSuchMethod)__|constructor|hasOwnProperty|isPrototypeOf|propertyIsEnumerable|to(?:JSON|LocaleString|String)|valueOf)$/
 
 interface ConcreteFieldDefinition {
@@ -21,7 +17,7 @@ interface ConcreteFieldDefinition {
     bitOffset: number
 }
 
-class ObjectRecord extends Record {
+const ObjectRecordBase = class ObjectRecord extends Record {
     toJSON() {
         const record = this as any
         const obj = {} as any
@@ -79,20 +75,6 @@ function entriesCode(fields: ReadonlyArray<ConcreteFieldDefinition>) {
     return s
 }
 
-function propertiesCode(fields: ReadonlyArray<ConcreteFieldDefinition>) {
-    if (fields.length === 0) {
-        return ""
-    }
-
-    let s = fields[0].accessor.propertyCode(fields[0].name, 0)
-    for (let i = 1; i < fields.length; ++i) {
-        const { accessor, name, bitOffset } = fields[i]
-        s += "\n"
-        s += accessor.propertyCode(name, bitOffset)
-    }
-    return s
-}
-
 function defineObjectRecord0(
     className: string,
     bitLength: number,
@@ -100,25 +82,15 @@ function defineObjectRecord0(
     extraMembers: { [key: string]: any },
 ) {
     const byteLength = (bitLength >> 3) + (bitLength & 0x07 ? 1 : 0)
-    const subRecords = fields.map(f => f.accessor.subRecord).filter(Boolean)
-    const retv = compile(
-        ObjectRecord,
-        subRecords,
-        `return class ${className} extends ${ObjectRecord.name} {
+    const ObjectRecord = Function(
+        "ObjectRecord",
+        `return class ${className} extends ObjectRecord {
     constructor(buffer, byteOffset) {
         super(buffer, byteOffset, ${byteLength})
     }
 
     static view(buffer, byteOffset = 0) {
         return Object.freeze(new ${className}(buffer, byteOffset))
-    }
-
-    static get uid() {
-        return ${JSON.stringify(uid())}
-    }
-
-    static get name() {
-        return ${JSON.stringify(className)}
     }
 
     static get bitLength() {
@@ -140,20 +112,26 @@ function defineObjectRecord0(
     static entries(record) {
         ${entriesCode(fields)}
     }
-
-    ${propertiesCode(fields)}
 }`,
-    )
+    )(ObjectRecordBase)
 
+    for (const { accessor, bitOffset, name } of fields) {
+        Object.defineProperty(ObjectRecord.prototype, name, {
+            get: accessor.defineGet(name, bitOffset),
+            set: accessor.defineSet(name, bitOffset),
+            configurable: true,
+            enumerable: true,
+        })
+    }
     for (const key of Object.keys(extraMembers)) {
-        Object.defineProperty(retv.prototype, key, {
+        Object.defineProperty(ObjectRecord.prototype, key, {
             value: extraMembers[key],
             configurable: true,
             writable: true,
         })
     }
 
-    return retv
+    return ObjectRecord
 }
 
 export interface DataTypeWithOffset<T extends DataType = DataType> {
@@ -161,12 +139,10 @@ export interface DataTypeWithOffset<T extends DataType = DataType> {
     bitOffset?: number
 }
 
-export type FieldTypeOf<T> = T extends DataType
-    ? AccessorDataTypeOf<T>
-    : T extends DataTypeWithOffset<infer FT> ? AccessorDataTypeOf<FT> : never
-
-export type RecordTypeOf<T> = ObjectRecordInterface &
-    { [F in keyof T]: FieldTypeOf<T[F]> }
+export type PropertyTypeOf<T> = T extends DataType
+    ? PropertyTypeOf_<T>
+    : T extends DataTypeWithOffset<infer TT> ? PropertyTypeOf_<TT> : never
+export type RecordTypeOf<T> = { [P in keyof T]: PropertyTypeOf<T[P]> }
 
 export function defineObjectRecord<
     T extends { [fieldName: string]: DataType | DataTypeWithOffset },
@@ -201,12 +177,6 @@ export function defineObjectRecord<
 
     let bitOffset = 0
     const fields = Object.keys(shape).map(name => {
-        assert(
-            VALID_FIELD_NAME.test(name),
-            `The name of 'shape.${name}' property should be a camelCase identifier, but got ${JSON.stringify(
-                name,
-            )}.`,
-        )
         assert(
             !INVALID_FIELD_NAME.test(name),
             `The name of 'shape.${name}' property should NOT be a forbidden name "${name}".`,

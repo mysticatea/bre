@@ -1,8 +1,5 @@
-import assert from "../assert"
-import { getTextEncoder } from "../text-encoder-registry"
-import { ArrayRecordConstructor, ObjectRecordConstructor } from "../types"
-
-export const sBuffer = Symbol("buffer")
+import assert from "./assert"
+import { sBuffer } from "./types"
 
 export class Record {
     private [sBuffer]: DataView
@@ -33,10 +30,14 @@ export class Record {
         )
     }
 
+    get [Symbol.toStringTag]() {
+        return "Record"
+    }
+
     toString() {
         const data = this[sBuffer]
         const length = data.byteLength
-        let s = ""
+        let s = `[object ${this[Symbol.toStringTag]} `
 
         for (let i = 0; i < length; ++i) {
             const elementValue = data.getUint8(i)
@@ -45,37 +46,8 @@ export class Record {
             }
             s += elementValue.toString(16)
         }
+        s += "]"
 
         return s
-    }
-}
-
-export const uid = (() => {
-    let n = 0
-    return () => {
-        const n1 = (n = (n + 1) & 0xffff).toString(16)
-        const n2 = Date.now().toString(16)
-        return `_${n2}$${`000${n1}`.slice(-4)}`
-    }
-})()
-
-export function compile(
-    baseRecord: Function,
-    subRecords: ReadonlyArray<ArrayRecordConstructor | ObjectRecordConstructor>,
-    sourceCode: string,
-): any {
-    try {
-        return Function(
-            "TextEncoder",
-            "assert",
-            "sBuffer",
-            baseRecord.name,
-            ...subRecords.map(r => r.uid),
-            sourceCode,
-        )(getTextEncoder(), assert, sBuffer, baseRecord, ...subRecords)
-    } catch (err) {
-        err.message += "\nSourceCode:"
-        err.message += sourceCode
-        throw err
     }
 }

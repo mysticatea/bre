@@ -1,14 +1,12 @@
-export interface RecordConstructor {
-    uid: string
-    name: string
+export { TextEncoder } from "./text-encoders/text-encoder"
+
+export interface RecordConstructor extends Function {
     bitLength: number
     byteLength: number
 }
 
 export interface Record {
     readonly constructor: RecordConstructor
-
-    toJSON(): any
     toString(): string
 }
 
@@ -133,30 +131,71 @@ export interface ArrayRecord<T> extends Record {
     values(): IterableIterator<T>
     [Symbol.iterator](): IterableIterator<T>
 
-    toJSON(): any
+    toJSON(): T[]
 
     [index: number]: T
 }
 
-export interface ObjectRecordConstructor<T extends ObjectRecord = ObjectRecord>
-    extends RecordConstructor {
-    view(data: ArrayBuffer | ArrayBufferView, byteOffset?: number): T
+export interface ObjectRecordConstructor<T = {}> extends RecordConstructor {
+    view(
+        data: ArrayBuffer | ArrayBufferView,
+        byteOffset?: number,
+    ): ObjectRecord<T> & T
 
     entries(record: T): Array<[string, any]>
     keys(record: T): Array<string>
     values(record: T): Array<any>
 }
 
-export interface ObjectRecord extends Record {
-    readonly constructor: ObjectRecordConstructor
+export interface ObjectRecord<T> extends Record {
+    readonly constructor: ObjectRecordConstructor<T>
 
-    toJSON(): any
+    toJSON(): {
+        [P in Exclude<
+            keyof this,
+            "constructor" | "toJSON" | "toString"
+        >]: this[P]
+    }
 }
 
-export type RecordOf<T> = T extends ArrayRecordConstructor<infer E>
-    ? ArrayRecord<E>
-    : T extends ObjectRecordConstructor<infer R> ? R : never
+export type RecordOf<T> = T extends
+    | ArrayRecordConstructor<any>
+    | ObjectRecordConstructor<any>
+    ? ReturnType<T["view"]>
+    : never
 
 export type ConstructorOf<T> = T extends ArrayRecord<infer E>
     ? ArrayRecordConstructor<E>
-    : T extends ObjectRecord ? ObjectRecordConstructor<T> : never
+    : T extends ObjectRecord<infer S> ? ObjectRecordConstructor<S> : never
+
+export type NumericDataType =
+    | "bit1"
+    | "bit2"
+    | "bit3"
+    | "bit4"
+    | "bit5"
+    | "bit6"
+    | "bit7"
+    | "bit8"
+    | "int8"
+    | "int16"
+    | "int32"
+    | "uint8"
+    | "uint16"
+    | "uint32"
+    | "float32"
+    | "float64"
+export type StringDataType = { encoding: string; byteLength: number }
+export type DataType =
+    | NumericDataType
+    | StringDataType
+    | ArrayRecordConstructor<any>
+    | ObjectRecordConstructor<any>
+
+export type PropertyTypeOf<T extends DataType> = T extends NumericDataType
+    ? number
+    : T extends StringDataType
+        ? string
+        : T extends ArrayRecordConstructor<any> | ObjectRecordConstructor<any>
+            ? RecordOf<T>
+            : never
