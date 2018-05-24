@@ -19,33 +19,33 @@ function output(format, file) {
 
 export default [
     {
-        input: ".temp/index.js",
+        input: ".temp/src/index.js",
         output: output("cjs", "index.js"),
         plugins,
     },
     {
-        input: ".temp/text-encoders/buffer.js",
+        input: ".temp/src/text-encoders/buffer.js",
         output: output("cjs", "text-encoders/buffer.js"),
         plugins,
     },
     {
-        input: ".temp/text-encoders/iconv-lite.js",
+        input: ".temp/src/text-encoders/iconv-lite.js",
         output: output("cjs", "text-encoders/iconv-lite.js"),
         external,
         plugins,
     },
     {
-        input: ".temp/index.js",
+        input: ".temp/src/index.js",
         output: output("es", "index.mjs"),
         plugins,
     },
     {
-        input: ".temp/text-encoders/buffer.js",
+        input: ".temp/src/text-encoders/buffer.js",
         output: output("es", "text-encoders/buffer.mjs"),
         plugins,
     },
     {
-        input: ".temp/text-encoders/iconv-lite.js",
+        input: ".temp/src/text-encoders/iconv-lite.js",
         output: output("es", "text-encoders/iconv-lite.mjs"),
         external,
         plugins,
