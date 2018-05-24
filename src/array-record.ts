@@ -102,6 +102,10 @@ const ArrayRecordBase = (() => {
         toJSON(): T[] {
             return Array.from(this)
         }
+
+        get [Symbol.toStringTag]() {
+            return "ArrayRecord"
+        }
     }
 
     for (const key of [
@@ -186,6 +190,10 @@ function defineArrayRecord0<T extends DataType>(
 
     get length() {
         return ${length}
+    }
+
+    get [Symbol.toStringTag]() {
+        return "${className}"
     }
 }`,
     )(ArrayRecordBase)

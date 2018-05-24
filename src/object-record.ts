@@ -22,6 +22,10 @@ const ObjectRecordBase = class ObjectRecord extends Record {
         }
         return obj
     }
+
+    get [Symbol.toStringTag]() {
+        return "ObjectRecord"
+    }
 }
 
 function keysCode(fields: ReadonlyArray<ConcreteFieldDefinition>) {
@@ -97,6 +101,10 @@ function defineObjectRecord0(
 
     static entries(record) {
         ${entriesCode(fields)}
+    }
+
+    get [Symbol.toStringTag]() {
+        return "${className}"
     }
 }`,
     )(ObjectRecordBase)
