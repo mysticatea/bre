@@ -1,3 +1,6 @@
+/.nyc_output
+/.temp
+/coverage
 /node_modules
 /text-encoders
 /index.*
