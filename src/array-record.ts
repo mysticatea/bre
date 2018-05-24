@@ -173,7 +173,7 @@ function defineArrayRecord0<T extends DataType>(
     }
 
     static view(buffer, byteOffset = 0) {
-        return Object.freeze(new ${className}(buffer, byteOffset))
+        return Object.freeze(new this(buffer, byteOffset))
     }
 
     static get bitLength() {

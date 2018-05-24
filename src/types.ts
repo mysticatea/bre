@@ -11,6 +11,9 @@ export interface Record {
 }
 
 export interface ArrayRecordConstructor<T = any> extends RecordConstructor {
+    new (data: ArrayBuffer | ArrayBufferView, byteOffset: number): ArrayRecord<
+        T
+    >
     view(
         data: ArrayBuffer | ArrayBufferView,
         byteOffset?: number,
@@ -137,6 +140,10 @@ export interface ArrayRecord<T> extends Record {
 }
 
 export interface ObjectRecordConstructor<T = {}> extends RecordConstructor {
+    new (data: ArrayBuffer | ArrayBufferView, byteOffset: number): ObjectRecord<
+        T
+    > &
+        T
     view(
         data: ArrayBuffer | ArrayBufferView,
         byteOffset?: number,
@@ -150,12 +157,7 @@ export interface ObjectRecordConstructor<T = {}> extends RecordConstructor {
 export interface ObjectRecord<T> extends Record {
     readonly constructor: ObjectRecordConstructor<T>
 
-    toJSON(): {
-        [P in Exclude<
-            keyof this,
-            "constructor" | "toJSON" | "toString"
-        >]: this[P]
-    }
+    toJSON(): { [P in keyof T]: T[P] }
 }
 
 export type RecordOf<T> = T extends
