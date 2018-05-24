@@ -3,6 +3,8 @@ export { TextEncoder } from "./text-encoders/text-encoder"
 export interface RecordConstructor extends Function {
     bitLength: number
     byteLength: number
+
+    getDataView(record: Record): DataView
 }
 
 export interface Record {

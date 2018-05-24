@@ -2,7 +2,11 @@ import assert from "./assert"
 import { sBuffer } from "./types"
 
 export class Record {
-    private [sBuffer]: DataView
+    private readonly [sBuffer]: DataView
+
+    static getDataView(record: Record): DataView {
+        return record[sBuffer]
+    }
 
     constructor(
         buffer: ArrayBuffer | ArrayBufferView,
