@@ -7,3 +7,7 @@ export function isRecord(x: any): x is Record {
         Object.prototype.hasOwnProperty.call(x, sBuffer)
     )
 }
+
+export function getDataView(record: Record): DataView {
+    return (record as any)[sBuffer]
+}

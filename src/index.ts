@@ -13,7 +13,7 @@ import {
     RecordOf,
     TextEncoder,
 } from "./types"
-import { isRecord } from "./utils"
+import { getDataView, isRecord } from "./utils"
 
 export {
     ArrayRecord,
@@ -28,6 +28,7 @@ export {
     TextEncoder,
     defineArrayRecord,
     defineObjectRecord,
+    getDataView,
     getTextEncoder,
     isRecord,
     setTextEncoder,
@@ -35,6 +36,7 @@ export {
 export default {
     defineArrayRecord,
     defineObjectRecord,
+    getDataView,
     getTextEncoder,
     isRecord,
     setTextEncoder,

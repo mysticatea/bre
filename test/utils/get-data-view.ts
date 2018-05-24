@@ -1,8 +1,7 @@
 import assert from "assert"
-import { RecordOf, defineObjectRecord } from "../../src/index"
-import { thrownMessage } from "../lib/util"
+import { defineObjectRecord, getDataView } from "../../src/index"
 
-describe("ObjectRecord#getDataView", () => {
+describe("getDataView", () => {
     it("should return DataView object.", () => {
         const TestRecord = defineObjectRecord("TestRecord", {
             a: "int8",
@@ -10,7 +9,7 @@ describe("ObjectRecord#getDataView", () => {
         })
         const buffer = Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05])
         const record = TestRecord.view(buffer, 1)
-        const dv = TestRecord.getDataView(record)
+        const dv = getDataView(record)
 
         assert.strictEqual(dv.byteLength, 2)
         assert.strictEqual(dv.getInt8(0), 2)
