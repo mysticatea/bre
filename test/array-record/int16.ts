@@ -129,7 +129,7 @@ describe("defineArrayRecord:", () => {
                     thrownMessage(() => {
                         record[k] = 32768
                     }),
-                    `'${k}' should be within '-32768..32767', but got 32768.`,
+                    `AssertionError: '${k}' should be within '-32768..32767', but got 32768.`,
                 )
             }
         })

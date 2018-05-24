@@ -129,7 +129,7 @@ describe("defineArrayRecord:", () => {
                     thrownMessage(() => {
                         record[k] = 65536
                     }),
-                    `'${k}' should be within '0..65535', but got 65536.`,
+                    `AssertionError: '${k}' should be within '0..65535', but got 65536.`,
                 )
             }
         })

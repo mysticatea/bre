@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "npm-run-all clean build:tsc -p build:rollup build:dts:**",
-    "build:tsc": "tsc --module es2015 --target es2015",
+    "build:tsc": "tsc --module es2015",
     "build:rollup": "rollup -c",
     "build:dts:index": "dts-bundle --name bre --main .temp/index.d.ts --out ../index.d.ts",
     "build:dts:text-encoders": "cpx .temp/text-encoders/*.d.ts text-encoders/",

@@ -143,7 +143,7 @@ describe("defineArrayRecord:", () => {
                     thrownMessage(() => {
                         record[k] = 16
                     }),
-                    `'${k}' should be within '0..15', but got 16.`,
+                    `AssertionError: '${k}' should be within '0..15', but got 16.`,
                 )
             }
         })
