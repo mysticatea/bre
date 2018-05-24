@@ -1,6 +1,5 @@
 import assert from "assert"
 import { ArrayRecord, defineArrayRecord } from "../../src/index"
-import { thrownMessage } from "../lib/util"
 
 describe("defineArrayRecord:", () => {
     describe("ArrayRecord with 'bit3' and 4", () => {
@@ -66,8 +65,8 @@ describe("defineArrayRecord:", () => {
 
         it("should have 'Array.prototype.forEach()'", () => {
             const receiver = { _: 777 }
-            const actual = []
-            record.forEach(function(value, index, array) {
+            const actual: any[] = []
+            record.forEach(function(this: any, value, index, array) {
                 actual.push([value, index, array, this])
             }, receiver)
             assert.deepStrictEqual(actual, [

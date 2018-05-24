@@ -1,5 +1,5 @@
 import assert from "assert"
-import { ObjectRecord, RecordOf, defineObjectRecord } from "../../src/index"
+import { RecordOf, defineObjectRecord } from "../../src/index"
 import { thrownMessage } from "../lib/util"
 
 describe("defineObjectRecord:", () => {
@@ -267,7 +267,7 @@ describe("defineObjectRecord:", () => {
             b: "bit5",
             c: "bit5",
         })
-        const patterns: Array<[string, number]> = [
+        const patterns: ReturnType<(typeof TestRecord)["entries"]> = [
             ["a", 0xf800],
             ["b", 0x07c0],
             ["c", 0x003e],

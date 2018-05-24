@@ -50,9 +50,6 @@ describe("defineArrayRecord:", () => {
         })
 
         describe("with offset 1", () => {
-            //eslint-disable-next-line no-shadow
-            let record = null
-
             beforeEach(() => {
                 record = TestRecord.view(buffer, 1)
             })

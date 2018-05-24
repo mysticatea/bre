@@ -1,6 +1,5 @@
 import assert from "assert"
-import { ObjectRecord, RecordOf, defineObjectRecord } from "../../src/index"
-import { thrownMessage } from "../lib/util"
+import { defineObjectRecord } from "../../src/index"
 
 describe("defineObjectRecord:", () => {
     it("ObjectRecord can be inherited.", () => {

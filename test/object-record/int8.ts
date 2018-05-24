@@ -1,5 +1,5 @@
 import assert from "assert"
-import { ObjectRecord, RecordOf, defineObjectRecord } from "../../src/index"
+import { RecordOf, defineObjectRecord } from "../../src/index"
 import { thrownMessage } from "../lib/util"
 
 describe("defineObjectRecord:", () => {
@@ -147,6 +147,7 @@ describe("defineObjectRecord:", () => {
         it("should throw if it wrote a non-integer (null)", () => {
             assert.strictEqual(
                 thrownMessage(() => {
+                    // @ts-ignore
                     record.a = null
                 }),
                 "AssertionError: 'a' should be an integer, but got null.",

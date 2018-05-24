@@ -20,7 +20,8 @@ const TcpHeader = defineObjectRecord("TcpHeader", {
     seqNo: "uint32",
     ackNo: "uint32",
     dataOffset: "bit4",
-    urgCode: { type: "bit1", bitOffset: 106 }, // 6 bits padding before this field.
+    _reserved0: "bit6", // padding
+    urgCode: "bit1",
     ackCode: "bit1",
     pshCode: "bit1",
     rstCode: "bit1",
@@ -56,14 +57,6 @@ class TcpHeader extends ObjectRecord {
 
     static view(buffer, byteOffset = 0) {
         return Object.freeze(new TcpHeader(buffer, byteOffset))
-    }
-
-    static get uid() {
-        return "_162dd77faca$0001"
-    }
-
-    static get name() {
-        return "TcpHeader"
     }
 
     static get bitLength() {

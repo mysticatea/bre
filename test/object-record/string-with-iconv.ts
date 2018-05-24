@@ -1,10 +1,5 @@
 import assert from "assert"
-import {
-    ObjectRecord,
-    RecordOf,
-    defineObjectRecord,
-    setTextEncoder,
-} from "../../src/index"
+import { RecordOf, defineObjectRecord, setTextEncoder } from "../../src/index"
 import IconvLiteTextEncoder from "../../src/text-encoders/iconv-lite"
 import { thrownMessage } from "../lib/util"
 

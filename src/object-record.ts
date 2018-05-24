@@ -2,11 +2,7 @@ import { getAccessor } from "./internal/accessor-registry"
 import assert from "./internal/assert"
 import { Record } from "./internal/record"
 import { Accessor } from "./internal/types"
-import {
-    DataType,
-    ObjectRecordConstructor,
-    PropertyTypeOf as PropertyTypeOf_,
-} from "./types"
+import { DataType, ObjectRecordConstructor, RecordTypeOf } from "./types"
 
 const VALID_RECORD_NAME = /^[A-Z][a-zA-Z0-9_$]*$/
 const INVALID_FIELD_NAME = /^(?:__(?:(?:define|lookup)(?:G|S)etter|proto|noSuchMethod)__|constructor|hasOwnProperty|isPrototypeOf|propertyIsEnumerable|to(?:JSON|LocaleString|String)|valueOf)$/
@@ -26,15 +22,6 @@ const ObjectRecordBase = class ObjectRecord extends Record {
         }
         return obj
     }
-}
-
-function isDataTypeWithOffset(type: any): type is DataTypeWithOffset {
-    return (
-        typeof type === "object" &&
-        typeof type.type !== "undefined" &&
-        (typeof type.byteLength === "undefined" ||
-            typeof type.byteLength === "number")
-    )
 }
 
 function keysCode(fields: ReadonlyArray<ConcreteFieldDefinition>) {
@@ -79,7 +66,6 @@ function defineObjectRecord0(
     className: string,
     bitLength: number,
     fields: ReadonlyArray<ConcreteFieldDefinition>,
-    extraMembers: { [key: string]: any },
 ) {
     const byteLength = (bitLength >> 3) + (bitLength & 0x07 ? 1 : 0)
     const ObjectRecord = Function(
@@ -123,48 +109,13 @@ function defineObjectRecord0(
             enumerable: true,
         })
     }
-    for (const key of Object.keys(extraMembers)) {
-        Object.defineProperty(ObjectRecord.prototype, key, {
-            value: extraMembers[key],
-            configurable: true,
-            writable: true,
-        })
-    }
 
     return ObjectRecord
 }
 
-export interface DataTypeWithOffset<T extends DataType = DataType> {
-    type: T
-    bitOffset?: number
-}
-
-export type PropertyTypeOf<T> = T extends DataType
-    ? PropertyTypeOf_<T>
-    : T extends DataTypeWithOffset<infer TT> ? PropertyTypeOf_<TT> : never
-export type RecordTypeOf<T> = { [P in keyof T]: PropertyTypeOf<T[P]> }
-
-export function defineObjectRecord<
-    T extends { [fieldName: string]: DataType | DataTypeWithOffset },
-    U extends { [key: string]: any }
->(
+export function defineObjectRecord<T extends { [fieldName: string]: DataType }>(
     className: string,
     shape: T,
-    options: { bitLength?: number; extraMembers?: U },
-): ObjectRecordConstructor<RecordTypeOf<T> & U>
-export function defineObjectRecord<
-    T extends { [fieldName: string]: DataType | DataTypeWithOffset }
->(className: string, shape: T): ObjectRecordConstructor<RecordTypeOf<T>>
-
-export function defineObjectRecord<
-    T extends { [fieldName: string]: DataType | DataTypeWithOffset }
->(
-    className: string,
-    shape: T,
-    {
-        bitLength = undefined,
-        extraMembers = {},
-    }: { bitLength?: number; extraMembers?: { [key: string]: any } } = {},
 ): ObjectRecordConstructor<RecordTypeOf<T>> {
     assert.string(className, "className")
     assert(
@@ -175,42 +126,23 @@ export function defineObjectRecord<
     )
     assert.object(shape, "shape")
 
-    let bitOffset = 0
+    let bitLength = 0
     const fields = Object.keys(shape).map(name => {
         assert(
             !INVALID_FIELD_NAME.test(name),
             `The name of 'shape.${name}' property should NOT be a forbidden name "${name}".`,
         )
         const fieldDef = shape[name]
-
-        let field: ConcreteFieldDefinition
-        if (isDataTypeWithOffset(fieldDef)) {
-            const { type, bitOffset: newBitOffset } = fieldDef
-            const accessor = getAccessor(type)
-
-            if (typeof newBitOffset === "number") {
-                assert.integer(newBitOffset, `shape.${name}.type`)
-                assert.gte(newBitOffset, bitOffset, `shape.${name}.type`)
-                bitOffset = newBitOffset
-            }
-
-            field = { name, accessor, bitOffset }
-        } else {
-            const accessor = getAccessor(fieldDef)
-            field = { name, accessor, bitOffset }
+        const accessor = getAccessor(fieldDef)
+        const field: ConcreteFieldDefinition = {
+            name,
+            accessor,
+            bitOffset: bitLength,
         }
 
-        bitOffset += field.accessor.bits
+        bitLength += accessor.bits
         return field
     })
 
-    if (typeof bitLength === "number") {
-        assert(
-            bitLength >= bitOffset,
-            "'options.bitLength' should not be less than the size of 'shape'.",
-        )
-        bitOffset = bitLength
-    }
-
-    return defineObjectRecord0(className, bitOffset, fields, extraMembers)
+    return defineObjectRecord0(className, bitLength, fields)
 }

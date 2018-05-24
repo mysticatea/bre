@@ -149,8 +149,8 @@ export interface ObjectRecordConstructor<T = {}> extends RecordConstructor {
         byteOffset?: number,
     ): ObjectRecord<T> & T
 
-    entries(record: T): Array<[string, any]>
-    keys(record: T): Array<string>
+    entries(record: T): Array<[keyof T, any]>
+    keys(record: T): Array<keyof T>
     values(record: T): Array<any>
 }
 
@@ -194,10 +194,11 @@ export type DataType =
     | ArrayRecordConstructor<any>
     | ObjectRecordConstructor<any>
 
-export type PropertyTypeOf<T extends DataType> = T extends NumericDataType
+export type PropertyTypeOf<T> = T extends NumericDataType
     ? number
     : T extends StringDataType
         ? string
         : T extends ArrayRecordConstructor<any> | ObjectRecordConstructor<any>
             ? RecordOf<T>
             : never
+export type RecordTypeOf<T> = { [P in keyof T]: PropertyTypeOf<T[P]> }

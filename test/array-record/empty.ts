@@ -44,7 +44,7 @@ describe("defineArrayRecord:", () => {
                     // This error message is different between Node.js 6.x and 8.x.
                     // https://github.com/eslint/typescript-eslint-parser/issues/467
                     //eslint-disable-next-line no-empty-pattern
-                    Object.freeze({})[0] = 1
+                    Object.freeze({} as any)[0] = 1
                 }),
             )
         })

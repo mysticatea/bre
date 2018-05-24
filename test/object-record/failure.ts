@@ -1,10 +1,5 @@
 import assert from "assert"
-import {
-    ObjectRecord,
-    RecordOf,
-    defineObjectRecord,
-    setTextEncoder,
-} from "../../src/index"
+import { defineObjectRecord, setTextEncoder } from "../../src/index"
 import NodejsBufferTextEncoder from "../../src/text-encoders/buffer"
 import { thrownMessage } from "../lib/util"
 

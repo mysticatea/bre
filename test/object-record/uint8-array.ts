@@ -1,6 +1,5 @@
 import assert from "assert"
 import {
-    ObjectRecord,
     RecordOf,
     defineArrayRecord,
     defineObjectRecord,
